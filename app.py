@@ -29,7 +29,7 @@ st.markdown(
         text-align: center;
         font-size: 38px !important;
         font-weight: bold;
-        color: #2C3E50;
+        color: #FFFFFF;   /* White Title */
     }
     .subtitle {
         text-align: center;
