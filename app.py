@@ -90,7 +90,7 @@ st.sidebar.write(
 
     **⚙️ Workflow:**
     - 📝 Input: Selected symptoms  
-    - 🔬 ML Model: Random Forest Classifier  
+    - 🔬 ML Model: Multiple model comparision  
     - 🏥 Output: Predicted disease  
 
     ⚠️ **Disclaimer:**  
@@ -98,4 +98,5 @@ st.sidebar.write(
     Please consult a healthcare professional for accurate diagnosis.
     """
 )
+
 
