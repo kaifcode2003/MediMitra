@@ -4,8 +4,6 @@ import numpy as np
 import joblib
 
 # --- 1. LOAD THE SAVED ASSETS ---
-# We use @st.cache_data to load the model and other assets only once.
-# This makes the app run faster.
 @st.cache_data
 def load_assets():
     """Loads the pre-trained model, label encoder, and symptom columns."""
@@ -16,55 +14,87 @@ def load_assets():
 
 model, encoder, symptoms = load_assets()
 
-# --- 2. SET UP THE USER INTERFACE (UI) ---
-st.set_page_config(page_title="Disease Predictor", page_icon="🩺")
-
-st.title("🩺 Disease Prediction System")
-st.write("""
-Enter the symptoms you are experiencing, and this app will predict the most likely disease.
-This is a demonstration model and **should not** be used for actual medical diagnosis.
-""")
-
-# Create a multi-select box for symptoms
-# The list of symptoms is loaded from our saved file
-selected_symptoms = st.multiselect(
-    "Select your symptoms:",
-    options=symptoms,
-    placeholder="Choose your symptoms"
+# --- 2. PAGE CONFIG ---
+st.set_page_config(
+    page_title="MediMitra: Disease Prediction System",
+    page_icon="💊",
+    layout="centered"
 )
 
-# --- 3. PREDICTION LOGIC ---
-# Create a button to trigger the prediction
-if st.button("Predict Disease", type="primary"):
-    if not selected_symptoms:
-        st.warning("Please select at least one symptom.")
-    else:
-        # Create the input array for the model
-        # Start with an array of all zeros
-        input_data = np.zeros(len(symptoms))
+# --- 3. HEADER SECTION ---
+st.markdown(
+    """
+    <style>
+    .main-title {
+        text-align: center;
+        font-size: 38px !important;
+        font-weight: bold;
+        color: #2C3E50;
+    }
+    .subtitle {
+        text-align: center;
+        font-size: 18px !important;
+        color: #7F8C8D;
+        margin-bottom: 15px;
+    }
+    .author {
+        text-align: center;
+        font-size: 16px !important;
+        color: #27AE60;
+        margin-top: 0px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-        # Set the corresponding symptom indices to 1
+st.markdown('<p class="main-title">💊 MediMitra: Disease Prediction System</p>', unsafe_allow_html=True)
+st.markdown('<p class="subtitle">🩺 Enter your symptoms and let MediMitra guide you towards the most likely condition.</p>', unsafe_allow_html=True)
+st.markdown('<p class="author">👨‍💻 Built by: <b>Mohd Kaif</b></p>', unsafe_allow_html=True)
+
+st.divider()
+
+# --- 4. INPUT SECTION ---
+st.subheader("🔍 Select Symptoms")
+selected_symptoms = st.multiselect(
+    "🤒 Choose the symptoms you are experiencing:",
+    options=symptoms,
+    placeholder="Type or scroll to search symptoms"
+)
+
+# --- 5. PREDICTION LOGIC ---
+if st.button("🚀 Predict Disease", use_container_width=True):
+    if not selected_symptoms:
+        st.warning("⚠️ Please select at least one symptom to proceed.")
+    else:
+        # Create input vector
+        input_data = np.zeros(len(symptoms))
         for symptom in selected_symptoms:
-            # Find the index of the symptom in our columns list
             idx = np.where(symptoms == symptom)[0][0]
             input_data[idx] = 1
-
-        # Reshape the data for the model (it expects a 2D array)
         input_data = input_data.reshape(1, -1)
 
-        # Make the prediction
+        # Make prediction
         prediction_index = model.predict(input_data)[0]
-
-        # Convert the prediction index back to the disease name
         predicted_disease = encoder.inverse_transform([prediction_index])[0]
 
-        # --- 4. DISPLAY THE RESULT ---
-        st.success(f"**Predicted Disease:** {predicted_disease}")
-        st.info("Remember to consult with a healthcare professional for an accurate diagnosis.")
+        # --- 6. RESULT DISPLAY ---
+        st.success(f"✅ **Predicted Disease:** {predicted_disease}")
+        st.info("💡 This prediction is for **demonstration purposes only**. Always consult a doctor for an accurate medical diagnosis.")
 
-st.sidebar.header("About")
-st.sidebar.info(
-    "This app uses a Random Forest model trained on a dataset of symptoms "
-    "to predict potential diseases. It demonstrates a complete machine learning workflow "
-    "from data to a deployed web application."
+# --- 7. SIDEBAR INFO ---
+st.sidebar.header("ℹ️ About MediMitra")
+st.sidebar.write(
+    """
+    🤖 **MediMitra** is a smart disease prediction assistant powered by a **Random Forest model**.  
+
+    **⚙️ Workflow:**
+    - 📝 Input: Selected symptoms  
+    - 🔬 ML Model: Random Forest Classifier  
+    - 🏥 Output: Predicted disease  
+
+    ⚠️ **Disclaimer:**  
+    This app is **not a substitute for medical advice**.  
+    Please consult a healthcare professional for accurate diagnosis.
+    """
 )
