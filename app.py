@@ -48,7 +48,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown('<p class="main-title">💊 MediMitra: Disease Prediction System</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-title">💊 MediMitra Pre-Version : Disease Prediction System</p>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">🩺 Enter your symptoms and let MediMitra guide you towards the most likely condition.</p>', unsafe_allow_html=True)
 st.markdown('<p class="author">👨‍💻 Built by: <b>Mohd Kaif</b></p>', unsafe_allow_html=True)
 
@@ -98,3 +98,4 @@ st.sidebar.write(
     Please consult a healthcare professional for accurate diagnosis.
     """
 )
+
